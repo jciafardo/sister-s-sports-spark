@@ -146,7 +146,7 @@ export const questions: Question[] = [
   { id: "f29", category: "football", difficulty: "hard", question: "Which player has the most career interceptions?", options: ["Rod Woodson", "Paul Krause", "Deion Sanders", "Ed Reed"], correctIndex: 1 },
   { id: "f30", category: "football", difficulty: "hard", question: "What is the 'Immaculate Reception'?", options: ["A famous catch by Franco Harris", "A Hail Mary by Doug Flutie", "A trick play by the Cowboys", "A blocked punt return"], correctIndex: 0 },
   { id: "f31", category: "football", difficulty: "hard", question: "Which quarterback has the most career losses?", options: ["Drew Bledsoe", "Vinny Testaverde", "Dan Marino", "Kerry Collins"], correctIndex: 1 },
-  { id: "f32", category: "football", difficulty: "hard", question: "Who kicked the longest field goal in NFL history?", options: ["Matt Prater", "Justin Tucker", "Sebastian Janikowski", "Adam Vinatieri"], correctIndex: 1 },
+  { id: "f32", category: "football", difficulty: "hard", question: "Who kicked the longest field goal in NFL history?", options: ["Matt Prater", "Cam Little", "Sebastian Janikowski", "Adam Vinatieri"], correctIndex: 1 },
 
   // ===================== BASEBALL =====================
   // BASEBALL - Easy
