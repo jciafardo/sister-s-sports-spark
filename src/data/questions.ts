@@ -1,4 +1,4 @@
-export type SportCategory = "soccer" | "basketball" | "football" | "baseball" | "tennis" | "hockey" | "mixed";
+export type SportCategory = "soccer" | "basketball" | "football" | "baseball" | "tennis" | "hockey" | "golf" | "boxing" | "swimming" | "track" | "volleyball" | "rugby" | "cricket" | "mma" | "skiing" | "cycling" | "gymnastics" | "wrestling" | "badminton" | "table-tennis" | "mixed";
 export type Difficulty = "easy" | "medium" | "hard";
 
 export interface Question {
@@ -17,6 +17,20 @@ export const categories: { id: SportCategory; name: string; emoji: string }[] = 
   { id: "baseball", name: "Baseball", emoji: "⚾" },
   { id: "tennis", name: "Tennis", emoji: "🎾" },
   { id: "hockey", name: "Hockey", emoji: "🏒" },
+  { id: "golf", name: "Golf", emoji: "⛳" },
+  { id: "boxing", name: "Boxing", emoji: "🥊" },
+  { id: "swimming", name: "Swimming", emoji: "🏊" },
+  { id: "track", name: "Track & Field", emoji: "🏃" },
+  { id: "volleyball", name: "Volleyball", emoji: "🏐" },
+  { id: "rugby", name: "Rugby", emoji: "🏉" },
+  { id: "cricket", name: "Cricket", emoji: "🏏" },
+  { id: "mma", name: "MMA", emoji: "🥋" },
+  { id: "skiing", name: "Skiing", emoji: "⛷️" },
+  { id: "cycling", name: "Cycling", emoji: "🚴" },
+  { id: "gymnastics", name: "Gymnastics", emoji: "🤸" },
+  { id: "wrestling", name: "Wrestling", emoji: "🤼" },
+  { id: "badminton", name: "Badminton", emoji: "🏸" },
+  { id: "table-tennis", name: "Table Tennis", emoji: "🏓" },
   { id: "mixed", name: "All Sports", emoji: "🏅" },
 ];
 
