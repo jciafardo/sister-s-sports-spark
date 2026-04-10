@@ -1,56 +1,17 @@
 
-# 🏆 Sports Trivia App
 
-A fun, multiple-choice sports trivia game with a **sporty & bold** design — clean lines, bold typography, and energetic colors.
+## Plan: Hide Question During Pause to Prevent Cheating
 
-## Pages & Features
+**Problem**: When a player pauses the quiz, the question remains visible in the background, allowing them to look up the answer.
 
-### 1. Home Screen
-- App logo and title with bold sporty branding
-- "Start Quiz" button front and center
-- Display current streak and best score
-- Quick stats (total quizzes played, questions answered)
+**Solution**: Update the pause overlay in `QuizScreen.tsx` to fully obscure the quiz content. The pause overlay already covers the screen, but we'll also hide the question text and answer options underneath it so they can't be inspected via dev tools or screen readers.
 
-### 2. Category Selection
-- Pick a sport: ⚽ Soccer, 🏀 Basketball, 🏈 Football, ⚾ Baseball, 🎾 Tennis, 🏒 Hockey, 🏅 Mixed/All Sports
-- Each category shown as a bold card with an icon
-- Pick a difficulty: Easy, Medium, Hard
+### Changes
 
-### 3. Quiz Screen
-- Multiple choice questions (4 options: A, B, C, D)
-- Timer bar counting down for each question
-- Progress indicator (e.g., "Question 3 of 10")
-- Instant feedback — green flash for correct, red for wrong, with the right answer shown
-- Running score displayed at top
+**`src/components/QuizScreen.tsx`**:
+- When `paused` is true, hide the question text and answer options (render null or placeholder content instead of the actual question/options)
+- The pause overlay already exists with `fixed inset-0 bg-background/90` — we'll make it fully opaque (`bg-background`) so nothing bleeds through
+- The timer will remain frozen as it already does
 
-### 4. Results Screen
-- Final score with a fun rating (e.g., "Rookie", "Pro", "MVP", "GOAT" based on performance)
-- Summary: correct/wrong breakdown
-- Streak tracker — shows consecutive correct answers
-- "Play Again" and "Change Category" buttons
-- Share score option
+This is a small, focused change — just conditionally hiding the question content and making the overlay fully opaque.
 
-### 5. Leaderboard
-- Top scores list with player names and scores
-- Filter by sport category or "All Time"
-- Highlight the current player's rank
-
-### 6. Profile / Badges
-- Display earned badges (e.g., "Soccer Scholar", "Perfect 10", "Speed Demon", "5-Day Streak")
-- Current streak counter
-- Total stats dashboard (games played, accuracy %, favorite category)
-
-## Design Direction
-- **Sporty & bold**: Strong typography, sport-inspired color palette (deep blues, vibrant orange/red accents, white text)
-- Subtle card shadows and clean spacing
-- Sport-themed icons and emoji throughout
-- Responsive — works great on both desktop and mobile
-
-## Data
-- Pre-loaded set of trivia questions across all sport categories and difficulty levels (stored locally, no backend needed to start)
-- Scores and badges saved in localStorage so progress persists
-
-## Future Ideas (not in v1)
-- User accounts and cloud-synced leaderboards
-- Daily challenge mode
-- Multiplayer head-to-head
