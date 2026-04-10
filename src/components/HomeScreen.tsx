@@ -56,10 +56,10 @@ const HomeScreen = ({ onStart, onLeaderboard, onProfile }: HomeScreenProps) => {
 
         {/* Secondary Nav */}
         <div className="flex gap-3">
-          <Button variant="outline" className="flex-1 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10" onClick={onLeaderboard}>
+          <Button variant="outline" className="flex-1 border-primary-foreground/20 text-muted-foreground hover:bg-primary-foreground/10" onClick={onLeaderboard}>
             🏅 Leaderboard
           </Button>
-          <Button variant="outline" className="flex-1 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10" onClick={onProfile}>
+          <Button variant="outline" className="flex-1 border-primary-foreground/20 text-muted-foreground hover:bg-primary-foreground/10" onClick={onProfile}>
             🎖️ Badges
           </Button>
         </div>
