@@ -100,7 +100,7 @@ const QuizScreen = ({ questions, onComplete, onQuit }: QuizScreenProps) => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Pause Overlay */}
       {paused && (
-        <div className="fixed inset-0 bg-background/90 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
           <div className="text-center space-y-6 p-8">
             <p className="text-4xl">⏸️</p>
             <h2 className="text-2xl font-bold text-foreground">Quiz Paused</h2>
@@ -151,11 +151,11 @@ const QuizScreen = ({ questions, onComplete, onQuit }: QuizScreenProps) => {
       <div className="flex-1 flex flex-col justify-center p-4">
         <div className="max-w-lg mx-auto w-full animate-slide-up" key={currentIndex}>
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-8 text-center leading-snug">
-            {question.question}
+            {paused ? "Question hidden" : question.question}
           </h2>
 
           <div className="space-y-3">
-            {question.options.map((option, i) => {
+            {!paused && question.options.map((option, i) => {
               let optionClass = "bg-card border-border hover:border-secondary";
               if (showFeedback) {
                 if (i === question.correctIndex) {
