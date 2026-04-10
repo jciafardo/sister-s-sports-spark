@@ -274,7 +274,7 @@ export const questions: Question[] = [
   { id: "b35", category: "basketball", difficulty: "hard", question: "Which player has the most career triple-doubles?", options: ["Magic Johnson", "Oscar Robertson", "Russell Westbrook", "LeBron James"], correctIndex: 2 },
   { id: "b36", category: "basketball", difficulty: "hard", question: "What was the highest-scoring NBA game ever?", options: ["Detroit 186 - Denver 184", "Phoenix 173 - Denver 143", "Boston 170 - Minneapolis 158", "Golden State 162 - Denver 158"], correctIndex: 0 },
 
-  { id: "f33", category: "football", difficulty: "hard", question: "Who holds the record for most sacks in a single season?", options: ["Reggie White", "Michael Strahan", "Mark Gastineau", "T.J. Watt"], correctIndex: 1 },
+  { id: "f33", category: "football", difficulty: "hard", question: "Who holds the record for most sacks in a single season?", options: ["Reggie White", "Myles Garrett", "Mark Gastineau", "T.J. Watt"], correctIndex: 1 },
   { id: "f34", category: "football", difficulty: "hard", question: "Which team won the first two Super Bowls?", options: ["Dallas Cowboys", "Miami Dolphins", "Green Bay Packers", "Pittsburgh Steelers"], correctIndex: 2 },
   { id: "f35", category: "football", difficulty: "hard", question: "What is the 'Tuck Rule Game'?", options: ["A controversial 2002 playoff game", "A rule about jersey tucking", "A preseason exhibition", "A rule about fumble recovery"], correctIndex: 0 },
   { id: "f36", category: "football", difficulty: "hard", question: "Who is the only player to win the Heisman Trophy twice?", options: ["Tim Tebow", "Archie Griffin", "Herschel Walker", "Bo Jackson"], correctIndex: 1 },
