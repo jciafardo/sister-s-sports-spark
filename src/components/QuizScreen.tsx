@@ -1,53 +1,58 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Question } from "@/data/questions";
 import { Progress } from "@/components/ui/progress";
 
+export interface AnswerRecord {
+  question: Question;
+  selectedIndex: number | null;
+  correct: boolean;
+}
+
 interface QuizScreenProps {
   questions: Question[];
-  onComplete: (score: number, total: number, maxStreak: number) => void;
+  onComplete: (answers: AnswerRecord[]) => void;
 }
 
 const TIMER_SECONDS = 15;
 
 const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [maxStreak, setMaxStreak] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [showFeedback, setShowFeedback] = useState(false);
+  const answersRef = useRef<AnswerRecord[]>([]);
+  const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const question = questions[currentIndex];
-  const isCorrect = selected === question.correctIndex;
+  const score = answersRef.current.filter(a => a.correct).length;
+  const streak = (() => {
+    let s = 0;
+    for (let i = answersRef.current.length - 1; i >= 0; i--) {
+      if (answersRef.current[i].correct) s++;
+      else break;
+    }
+    return s;
+  })();
 
-  const handleNext = useCallback(() => {
+  const advance = (selectedIdx: number | null) => {
+    const correct = selectedIdx === question.correctIndex;
+    answersRef.current.push({ question, selectedIndex: selectedIdx, correct });
+
     if (currentIndex + 1 >= questions.length) {
-      onComplete(score + (isCorrect && selected !== null ? 1 : 0), questions.length, Math.max(maxStreak, streak + (isCorrect && selected !== null ? 1 : 0)));
+      onComplete(answersRef.current);
     } else {
       setCurrentIndex(i => i + 1);
       setSelected(null);
       setShowFeedback(false);
       setTimeLeft(TIMER_SECONDS);
     }
-  }, [currentIndex, questions.length, onComplete, score, isCorrect, selected, maxStreak, streak]);
+  };
 
   const handleSelect = (index: number) => {
     if (showFeedback) return;
     setSelected(index);
     setShowFeedback(true);
-    const correct = index === question.correctIndex;
-    if (correct) {
-      setScore(s => s + 1);
-      setStreak(s => {
-        const newStreak = s + 1;
-        setMaxStreak(m => Math.max(m, newStreak));
-        return newStreak;
-      });
-    } else {
-      setStreak(0);
-    }
-    setTimeout(handleNext, 1500);
+    advanceTimerRef.current = setTimeout(() => advance(index), 1500);
   };
 
   // Timer
@@ -55,14 +60,22 @@ const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
     if (showFeedback) return;
     if (timeLeft <= 0) {
       setShowFeedback(true);
-      setStreak(0);
-      setTimeout(handleNext, 1500);
+      advanceTimerRef.current = setTimeout(() => advance(null), 1500);
       return;
     }
     const timer = setTimeout(() => setTimeLeft(t => t - 1), 1000);
     return () => clearTimeout(timer);
-  }, [timeLeft, showFeedback, handleNext]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, showFeedback]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
+    };
+  }, []);
+
+  const isCorrect = selected === question.correctIndex;
   const labels = ["A", "B", "C", "D"];
 
   return (
@@ -98,7 +111,7 @@ const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
 
       {/* Question */}
       <div className="flex-1 flex flex-col justify-center p-4">
-        <div className="max-w-lg mx-auto w-full animate-slide-up">
+        <div className="max-w-lg mx-auto w-full animate-slide-up" key={currentIndex}>
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-8 text-center leading-snug">
             {question.question}
           </h2>
