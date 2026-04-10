@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import HomeScreen from "@/components/HomeScreen";
 import CategorySelect from "@/components/CategorySelect";
 import QuizScreen from "@/components/QuizScreen";
+import type { AnswerRecord } from "@/components/QuizScreen";
 import ResultsScreen from "@/components/ResultsScreen";
 import Leaderboard from "@/components/Leaderboard";
 import Profile from "@/components/Profile";
@@ -16,6 +17,7 @@ const Index = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [lastResult, setLastResult] = useState({ score: 0, total: 0, maxStreak: 0 });
+  const [lastAnswers, setLastAnswers] = useState<AnswerRecord[]>([]);
 
   const handleStartCategory = useCallback((cat: SportCategory, diff: Difficulty) => {
     setCategory(cat);
@@ -24,8 +26,17 @@ const Index = () => {
     setScreen("quiz");
   }, []);
 
-  const handleQuizComplete = useCallback((score: number, total: number, maxStreak: number) => {
+  const handleQuizComplete = useCallback((answers: AnswerRecord[]) => {
+    const score = answers.filter(a => a.correct).length;
+    const total = answers.length;
+    let maxStreak = 0, currentStreak = 0;
+    for (const a of answers) {
+      if (a.correct) { currentStreak++; maxStreak = Math.max(maxStreak, currentStreak); }
+      else currentStreak = 0;
+    }
+
     setLastResult({ score, total, maxStreak });
+    setLastAnswers(answers);
     const stats = getPlayerStats();
     updateStatsAfterGame(score, total, category, maxStreak);
     saveResult({
@@ -66,6 +77,7 @@ const Index = () => {
           total={lastResult.total}
           maxStreak={lastResult.maxStreak}
           category={category}
+          answers={lastAnswers}
           onPlayAgain={handlePlayAgain}
           onChangeCategory={() => setScreen("category")}
           onHome={() => setScreen("home")}
