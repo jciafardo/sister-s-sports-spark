@@ -244,24 +244,49 @@ export const questions: Question[] = [
   { id: "h30", category: "hockey", difficulty: "hard", question: "Who scored 'The Goal' in the 2010 Olympics for Canada?", options: ["Wayne Gretzky", "Sidney Crosby", "Jonathan Toews", "Jarome Iginla"], correctIndex: 1 },
   { id: "h31", category: "hockey", difficulty: "hard", question: "Which team has the longest Stanley Cup drought among Original Six teams?", options: ["Toronto Maple Leafs", "Boston Bruins", "New York Rangers", "Detroit Red Wings"], correctIndex: 0 },
   { id: "h32", category: "hockey", difficulty: "hard", question: "What is the 'Miracle on Ice'?", options: ["A famous goal by Bobby Orr", "USA beating USSR in 1980 Olympics", "A record shutout", "Canada winning gold in 2002"], correctIndex: 1 },
+  { id: "h33", category: "hockey", difficulty: "hard", question: "Who was the first European player to captain a Stanley Cup-winning team?", options: ["Nicklas Lidstrom", "Jaromir Jagr", "Peter Forsberg", "Henrik Zetterberg"], correctIndex: 0 },
+  { id: "h34", category: "hockey", difficulty: "hard", question: "What is the record for most points in a single NHL season?", options: ["199", "212", "215", "225"], correctIndex: 2 },
+  { id: "h35", category: "hockey", difficulty: "hard", question: "Which NHL team relocated to become the Arizona Coyotes?", options: ["Quebec Nordiques", "Hartford Whalers", "Winnipeg Jets", "Minnesota North Stars"], correctIndex: 2 },
+  { id: "h36", category: "hockey", difficulty: "hard", question: "Who scored the fastest goal from the start of an NHL game?", options: ["Alexander Mogilny", "Doug Smail", "Bryan Trottier", "Alex Burrows"], correctIndex: 1 },
+
+  // Extra hard questions for other sports
+  { id: "s35", category: "soccer", difficulty: "hard", question: "Which player has made the most World Cup appearances?", options: ["Lothar Matthäus", "Paolo Maldini", "Cristiano Ronaldo", "Gianluigi Buffon"], correctIndex: 0 },
+  { id: "s36", category: "soccer", difficulty: "hard", question: "What is the 'Panenka' penalty technique named after?", options: ["An Italian player", "A Czech player", "A Brazilian player", "A German player"], correctIndex: 1 },
+  { id: "s37", category: "soccer", difficulty: "hard", question: "Which club has won the most domestic league titles worldwide?", options: ["Real Madrid", "Rangers", "Al Ahly", "Juventus"], correctIndex: 2 },
+  { id: "s38", category: "soccer", difficulty: "hard", question: "Who is the only player to win the World Cup as both player and manager?", options: ["Pelé", "Franz Beckenbauer", "Zinedine Zidane", "Didier Deschamps"], correctIndex: 3 },
+
+  { id: "b33", category: "basketball", difficulty: "hard", question: "What year was the NBA-ABA merger?", options: ["1972", "1976", "1979", "1983"], correctIndex: 1 },
+  { id: "b34", category: "basketball", difficulty: "hard", question: "Who holds the record for most blocks in a single game?", options: ["Hakeem Olajuwon", "Elmore Smith", "Mark Eaton", "Dikembe Mutombo"], correctIndex: 1 },
+  { id: "b35", category: "basketball", difficulty: "hard", question: "Which player has the most career triple-doubles?", options: ["Magic Johnson", "Oscar Robertson", "Russell Westbrook", "LeBron James"], correctIndex: 2 },
+  { id: "b36", category: "basketball", difficulty: "hard", question: "What was the highest-scoring NBA game ever?", options: ["Detroit 186 - Denver 184", "Phoenix 173 - Denver 143", "Boston 170 - Minneapolis 158", "Golden State 162 - Denver 158"], correctIndex: 0 },
+
+  { id: "f33", category: "football", difficulty: "hard", question: "Who holds the record for most sacks in a single season?", options: ["Reggie White", "Michael Strahan", "Mark Gastineau", "T.J. Watt"], correctIndex: 3 },
+  { id: "f34", category: "football", difficulty: "hard", question: "Which team won the first two Super Bowls?", options: ["Dallas Cowboys", "Miami Dolphins", "Green Bay Packers", "Pittsburgh Steelers"], correctIndex: 2 },
+  { id: "f35", category: "football", difficulty: "hard", question: "What is the 'Tuck Rule Game'?", options: ["A controversial 2002 playoff game", "A rule about jersey tucking", "A preseason exhibition", "A rule about fumble recovery"], correctIndex: 0 },
+  { id: "f36", category: "football", difficulty: "hard", question: "Who is the only player to win the Heisman Trophy twice?", options: ["Tim Tebow", "Archie Griffin", "Herschel Walker", "Bo Jackson"], correctIndex: 1 },
+
+  { id: "ba33", category: "baseball", difficulty: "hard", question: "What is the 'Black Sox Scandal'?", options: ["A steroid scandal", "1919 World Series fixing", "A gambling ring in the 1940s", "A bribery scandal in the 1960s"], correctIndex: 1 },
+  { id: "ba34", category: "baseball", difficulty: "hard", question: "Who pitched the most no-hitters in MLB history?", options: ["Sandy Koufax", "Bob Feller", "Nolan Ryan", "Randy Johnson"], correctIndex: 2 },
+  { id: "ba35", category: "baseball", difficulty: "hard", question: "What is a 'balk'?", options: ["A type of hit", "An illegal motion by the pitcher", "A base running error", "A catching mistake"], correctIndex: 1 },
+  { id: "ba36", category: "baseball", difficulty: "hard", question: "Which player has the highest career batting average?", options: ["Ted Williams", "Ty Cobb", "Rogers Hornsby", "Babe Ruth"], correctIndex: 1 },
+
+  { id: "t33", category: "tennis", difficulty: "hard", question: "Who was the last player to win the calendar-year Grand Slam in men's singles?", options: ["Roger Federer", "Rod Laver", "Don Budge", "Novak Djokovic"], correctIndex: 1 },
+  { id: "t34", category: "tennis", difficulty: "hard", question: "What is the 'Sunshine Double'?", options: ["Winning Indian Wells and Miami", "Winning Australian and French Open", "Winning two clay events", "Winning two grass events"], correctIndex: 0 },
+  { id: "t35", category: "tennis", difficulty: "hard", question: "Who holds the record for most consecutive weeks at World No. 1 (men's)?", options: ["Roger Federer", "Pete Sampras", "Novak Djokovic", "Jimmy Connors"], correctIndex: 2 },
+  { id: "t36", category: "tennis", difficulty: "hard", question: "Which player won Wimbledon 5 consecutive times in the Open Era?", options: ["Pete Sampras", "Roger Federer", "Björn Borg", "Novak Djokovic"], correctIndex: 2 },
 ];
 
 export function getQuestions(category: SportCategory, difficulty: Difficulty, count = 10): Question[] {
-  if (category === "mixed") {
-    const pool = questions.filter(q => q.difficulty === difficulty);
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    if (shuffled.length >= count) return shuffled.slice(0, count);
-    const remaining = questions.filter(q => q.difficulty !== difficulty).sort(() => Math.random() - 0.5);
-    return [...shuffled, ...remaining].slice(0, count);
-  }
+  let pool: Question[];
 
-  // For a specific sport, ONLY use questions from that sport
-  let pool = questions.filter(q => q.category === category && q.difficulty === difficulty);
-  if (pool.length < count) {
-    const extra = questions.filter(q => q.category === category && q.difficulty !== difficulty);
-    pool = [...pool, ...extra];
+  if (category === "mixed") {
+    pool = questions.filter(q => q.difficulty === difficulty);
+  } else {
+    // For a specific sport, ONLY use questions from that sport AND the selected difficulty
+    pool = questions.filter(q => q.category === category && q.difficulty === difficulty);
   }
 
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }
+
