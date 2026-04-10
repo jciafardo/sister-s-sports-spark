@@ -1,16 +1,81 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useCallback } from "react";
+import HomeScreen from "@/components/HomeScreen";
+import CategorySelect from "@/components/CategorySelect";
+import QuizScreen from "@/components/QuizScreen";
+import ResultsScreen from "@/components/ResultsScreen";
+import Leaderboard from "@/components/Leaderboard";
+import Profile from "@/components/Profile";
+import { getQuestions, type SportCategory, type Difficulty, type Question } from "@/data/questions";
+import { updateStatsAfterGame, saveResult, getPlayerStats } from "@/data/storage";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
-  return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
-  );
+type Screen = "home" | "category" | "quiz" | "results" | "leaderboard" | "profile";
+
+const Index = () => {
+  const [screen, setScreen] = useState<Screen>("home");
+  const [category, setCategory] = useState<SportCategory>("mixed");
+  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
+  const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
+  const [lastResult, setLastResult] = useState({ score: 0, total: 0, maxStreak: 0 });
+
+  const handleStartCategory = useCallback((cat: SportCategory, diff: Difficulty) => {
+    setCategory(cat);
+    setDifficulty(diff);
+    setQuizQuestions(getQuestions(cat, diff, 10));
+    setScreen("quiz");
+  }, []);
+
+  const handleQuizComplete = useCallback((score: number, total: number, maxStreak: number) => {
+    setLastResult({ score, total, maxStreak });
+    const stats = getPlayerStats();
+    updateStatsAfterGame(score, total, category, maxStreak);
+    saveResult({
+      id: Date.now().toString(),
+      playerName: stats.playerName || "Player",
+      category,
+      difficulty,
+      score,
+      totalQuestions: total,
+      date: new Date().toISOString(),
+      streak: maxStreak,
+    });
+    setScreen("results");
+  }, [category, difficulty]);
+
+  const handlePlayAgain = useCallback(() => {
+    setQuizQuestions(getQuestions(category, difficulty, 10));
+    setScreen("quiz");
+  }, [category, difficulty]);
+
+  switch (screen) {
+    case "home":
+      return (
+        <HomeScreen
+          onStart={() => setScreen("category")}
+          onLeaderboard={() => setScreen("leaderboard")}
+          onProfile={() => setScreen("profile")}
+        />
+      );
+    case "category":
+      return <CategorySelect onSelect={handleStartCategory} onBack={() => setScreen("home")} />;
+    case "quiz":
+      return <QuizScreen questions={quizQuestions} onComplete={handleQuizComplete} />;
+    case "results":
+      return (
+        <ResultsScreen
+          score={lastResult.score}
+          total={lastResult.total}
+          maxStreak={lastResult.maxStreak}
+          category={category}
+          onPlayAgain={handlePlayAgain}
+          onChangeCategory={() => setScreen("category")}
+          onHome={() => setScreen("home")}
+        />
+      );
+    case "leaderboard":
+      return <Leaderboard onBack={() => setScreen("home")} />;
+    case "profile":
+      return <Profile onBack={() => setScreen("home")} />;
+  }
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
