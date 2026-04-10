@@ -69,7 +69,7 @@ const Index = () => {
     case "category":
       return <CategorySelect onSelect={handleStartCategory} onBack={() => setScreen("home")} />;
     case "quiz":
-      return <QuizScreen questions={quizQuestions} onComplete={handleQuizComplete} />;
+      return <QuizScreen questions={quizQuestions} onComplete={handleQuizComplete} onQuit={() => setScreen("home")} />;
     case "results":
       return (
         <ResultsScreen

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { Question } from "@/data/questions";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 
 export interface AnswerRecord {
   question: Question;
@@ -11,15 +12,17 @@ export interface AnswerRecord {
 interface QuizScreenProps {
   questions: Question[];
   onComplete: (answers: AnswerRecord[]) => void;
+  onQuit: () => void;
 }
 
 const TIMER_SECONDS = 15;
 
-const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
+const QuizScreen = ({ questions, onComplete, onQuit }: QuizScreenProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [paused, setPaused] = useState(false);
   const answersRef = useRef<AnswerRecord[]>([]);
   const advanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -49,15 +52,30 @@ const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
   };
 
   const handleSelect = (index: number) => {
-    if (showFeedback) return;
+    if (showFeedback || paused) return;
     setSelected(index);
     setShowFeedback(true);
     advanceTimerRef.current = setTimeout(() => advance(index), 1500);
   };
 
+  const handlePause = () => {
+    setPaused(true);
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+  };
+
+  const handleResume = () => {
+    setPaused(false);
+    if (showFeedback) {
+      advanceTimerRef.current = setTimeout(() => advance(selected), 800);
+    }
+  };
+
   // Timer
   useEffect(() => {
-    if (showFeedback) return;
+    if (showFeedback || paused) return;
     if (timeLeft <= 0) {
       setShowFeedback(true);
       advanceTimerRef.current = setTimeout(() => advance(null), 1500);
@@ -66,7 +84,7 @@ const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
     const timer = setTimeout(() => setTimeLeft(t => t - 1), 1000);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeLeft, showFeedback]);
+  }, [timeLeft, showFeedback, paused]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -80,12 +98,32 @@ const QuizScreen = ({ questions, onComplete }: QuizScreenProps) => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Pause Overlay */}
+      {paused && (
+        <div className="fixed inset-0 bg-background/90 z-50 flex items-center justify-center">
+          <div className="text-center space-y-6 p-8">
+            <p className="text-4xl">⏸️</p>
+            <h2 className="text-2xl font-bold text-foreground">Quiz Paused</h2>
+            <p className="text-muted-foreground">Question {currentIndex + 1} of {questions.length} · Score: {score}</p>
+            <div className="flex flex-col gap-3 w-60 mx-auto">
+              <Button onClick={handleResume} className="w-full">▶️ Resume</Button>
+              <Button variant="outline" onClick={onQuit} className="w-full">🏠 Quit to Home</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="bg-primary p-4">
         <div className="max-w-lg mx-auto">
           <div className="flex justify-between items-center text-primary-foreground mb-2">
             <span className="font-bold">Question {currentIndex + 1}/{questions.length}</span>
-            <span className="font-bold text-secondary">Score: {score}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-bold text-secondary">Score: {score}</span>
+              <button onClick={handlePause} className="text-primary-foreground/70 hover:text-primary-foreground text-lg" title="Pause">
+                ⏸️
+              </button>
+            </div>
           </div>
           <Progress value={(currentIndex / questions.length) * 100} className="h-2 bg-primary-foreground/20" />
         </div>
