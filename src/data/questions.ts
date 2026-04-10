@@ -247,21 +247,16 @@ export const questions: Question[] = [
 ];
 
 export function getQuestions(category: SportCategory, difficulty: Difficulty, count = 10): Question[] {
-  if (category === "mixed") {
-    const pool = questions.filter(q => q.difficulty === difficulty);
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    if (shuffled.length >= count) return shuffled.slice(0, count);
-    const remaining = questions.filter(q => q.difficulty !== difficulty).sort(() => Math.random() - 0.5);
-    return [...shuffled, ...remaining].slice(0, count);
-  }
+  let pool: Question[];
 
-  // For a specific sport, ONLY use questions from that sport
-  let pool = questions.filter(q => q.category === category && q.difficulty === difficulty);
-  if (pool.length < count) {
-    const extra = questions.filter(q => q.category === category && q.difficulty !== difficulty);
-    pool = [...pool, ...extra];
+  if (category === "mixed") {
+    pool = questions.filter(q => q.difficulty === difficulty);
+  } else {
+    // For a specific sport, ONLY use questions from that sport AND the selected difficulty
+    pool = questions.filter(q => q.category === category && q.difficulty === difficulty);
   }
 
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }
+
