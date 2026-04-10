@@ -28,7 +28,7 @@ const CategorySelect = ({ onSelect, onBack }: CategorySelectProps) => {
           <div className="animate-slide-up">
             <h2 className="text-3xl font-extrabold text-foreground mb-2">Pick a Sport</h2>
             <p className="text-muted-foreground mb-6">Choose your category</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
