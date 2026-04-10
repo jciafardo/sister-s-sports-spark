@@ -93,21 +93,22 @@ export const questions: Question[] = [
 ];
 
 export function getQuestions(category: SportCategory, difficulty: Difficulty, count = 10): Question[] {
-  let pool = category === "mixed"
-    ? questions.filter(q => q.difficulty === difficulty)
-    : questions.filter(q => q.category === category && q.difficulty === difficulty);
+  if (category === "mixed") {
+    const pool = questions.filter(q => q.difficulty === difficulty);
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    if (shuffled.length >= count) return shuffled.slice(0, count);
+    // Fill with other difficulties if needed
+    const remaining = questions.filter(q => q.difficulty !== difficulty).sort(() => Math.random() - 0.5);
+    return [...shuffled, ...remaining].slice(0, count);
+  }
 
-  if (pool.length < count && category !== "mixed") {
+  // For a specific sport, ONLY use questions from that sport
+  let pool = questions.filter(q => q.category === category && q.difficulty === difficulty);
+  if (pool.length < count) {
     const extra = questions.filter(q => q.category === category && q.difficulty !== difficulty);
     pool = [...pool, ...extra];
   }
-  if (pool.length < count) {
-    const ids = new Set(pool.map(q => q.id));
-    const filler = questions.filter(q => !ids.has(q.id));
-    pool = [...pool, ...filler];
-  }
 
-  // Shuffle and take count
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
 }
